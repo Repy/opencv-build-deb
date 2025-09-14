@@ -1,4 +1,4 @@
-name: CI
+ho name: CI
 on:
   push:
     branches: [ "main" ]
@@ -16,4 +16,4 @@ jobs:
           sudo apt-get install -y build-essential devscripts debhelper
           git clone https://salsa.debian.org/science-team/opencv.git
           cd opencv
-          debuild
+          echo "y" | debuild
