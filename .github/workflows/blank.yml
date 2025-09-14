@@ -10,7 +10,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04]
     env: 
-      DSCVERIFY_KEYRINGS: /etc/apt/trusted.gpg:~/.gnupg/pubring.gpg
+      DSCVERIFY_KEYRINGS: /etc/apt/trusted.gpg:~/.gnupg/pubring.kbx:~/.gnupg/trustdb.gpg
     steps:
       - uses: actions/checkout@v4
       - name: script
