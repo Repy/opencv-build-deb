@@ -9,14 +9,19 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
-    env: 
-      DSCVERIFY_KEYRINGS: /etc/apt/trusted.gpg:~/.gnupg/pubring.kbx:~/.gnupg/trustdb.gpg
     steps:
       - uses: actions/checkout@v4
+      - name: Configure GPG Key
+        run: |
+          echo -n "$GPG" | base64 --decode | gpg --import
+        env:
+          GPG: ${{ secrets.GPG }}
       - name: script
         run: |
+          echo 'DEBSIGN_KEYID=gamecube02+git@gmail.com' > ~/.devscripts
           sudo apt-get update -y
-          sudo apt-get install -y build-essential devscripts debhelper cmake default-jdk dh-sequence-python3 doxygen dh-sequence-javahelper ninja-build libavcodec-dev libavformat-dev libdc1394-dev libeigen3-dev libgdal-dev libgdcm-dev libvtkgdcm-dev libgdcm-tools libgl-dev libglu1-mesa-dev libgoogle-glog-dev libgphoto2-dev libharfbuzz-dev libjpeg-dev liblapack-dev liblapacke-dev libleptonica-dev libopenexr-dev libopenjp2-7-dev libopenjpip-dec-server libopenjp2-tools libimath-dev libpng-dev libprotobuf-dev libqt5opengl5-dev libraw1394-dev libswscale-dev libtbb-dev libtesseract-dev libtiff-dev libv4l-dev libva-dev libvtk9-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev dh-sequence-maven-repo-helper ocl-icd-opencl-dev protobuf-compiler python3-all-dev dh-sequence-numpy3 python3-bs4 python3-imath qtbase5-dev
+          sudo apt-get install -y fakeroot build-essential devscripts debhelper
+          sudo apt-get install -y cmake default-jdk dh-sequence-python3 doxygen dh-sequence-javahelper ninja-build libavcodec-dev libavformat-dev libdc1394-dev libeigen3-dev libgdal-dev libgdcm-dev libvtkgdcm-dev libgdcm-tools libgl-dev libglu1-mesa-dev libgoogle-glog-dev libgphoto2-dev libharfbuzz-dev libjpeg-dev liblapack-dev liblapacke-dev libleptonica-dev libopenexr-dev libopenjp2-7-dev libopenjpip-dec-server libopenjp2-tools libimath-dev libpng-dev libprotobuf-dev libqt5opengl5-dev libraw1394-dev libswscale-dev libtbb-dev libtesseract-dev libtiff-dev libv4l-dev libva-dev libvtk9-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev dh-sequence-maven-repo-helper ocl-icd-opencl-dev protobuf-compiler python3-all-dev dh-sequence-numpy3 python3-bs4 python3-imath qtbase5-dev
           dget -u https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/opencv/4.2.0+dfsg-5/opencv_4.2.0+dfsg-5.dsc
           cd opencv_4.2.0
           echo "y" | debuild
